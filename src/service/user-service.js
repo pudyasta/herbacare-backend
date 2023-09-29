@@ -7,27 +7,28 @@ import {
 import { validate } from "../validation/validation.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
+import jwt from "jsonwebtoken";
+import { response } from "express";
 
 const registerService = async (req) => {
   const user = validate(registerUservalidation, req);
 
   const countUser = await prismaClient.user.count({
     where: {
-      nik: user.nik,
+      email: user.email,
     },
   });
 
-  if (countUser == 1) new ResponseError(400, "User telah terdaftar");
+  if (countUser == 1) new ResponseError(400, "Email telah terdaftar");
 
   user.password = await bcrypt.hash(user.password, 10);
 
   return prismaClient.user.create({
     data: user,
     select: {
-      nik: true,
       name: true,
       email: true,
-      alamat: true,
+      address: true,
     },
   });
 };
@@ -40,7 +41,8 @@ const login = async (req) => {
       email: logReq.email,
     },
     select: {
-      nik: true,
+      name: true,
+      address: true,
       email: true,
       password: true,
     },
@@ -54,22 +56,26 @@ const login = async (req) => {
   if (!isPasswordValid) {
     throw new ResponseError(401, "Username or password wrong");
   }
-
-  const token = uuid().toString();
-  return prismaClient.user.update({
+  const jwToken = jwt.sign(
+    {
+      data: {
+        email: user.email,
+        name: user.name,
+        address: user.address,
+      },
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1m" }
+  );
+  return {
+    status: "success",
     data: {
-      token,
+      email: user.email,
+      name: user.name,
+      address: user.address,
+      jwToken,
     },
-    where: {
-      email: logReq.email,
-    },
-    select: {
-      token: true,
-      name: true,
-      email: true,
-      alamat: true,
-    },
-  });
+  };
 };
 
 export default { registerService, login };

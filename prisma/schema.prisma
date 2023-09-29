@@ -6,11 +6,89 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
+model User {
+  user_id   String      @id @default(uuid())
+  name      String      @db.VarChar(100)
+  email     String      @unique @db.VarChar(100)
+  address   String      @db.VarChar(100)
+  password  String      @db.VarChar(100)
+  ttl       DateTime    @db.Date()
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  reservasi Reservasi[]
 
-model User{
-  id String @default(uuid()) @id
+  @@map("users")
+}
+
+model Categories {
+  category_id   Int        @id @default(autoincrement())
+  category_name String     @db.VarChar(20)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  articles      Articles[]
+
+  @@map("categories")
+}
+
+model Articles {
+  articles_id Int        @id @default(autoincrement())
+  title       String     @db.VarChar(30)
+  body        String     @db.LongText
+  category_id Int
+  category    Categories @relation(fields: [category_id], references: [category_id])
+
+  @@map("articles")
+}
+
+model Kliniks {
+  klinik_id          Int        @id @default(autoincrement())
+  klinik_name        String     @db.VarChar(100)
+  klinik_address     String     @db.VarChar(500)
+  klinik_phone       String     @unique @db.VarChar(14)
+  klinik_email       String     @unique @db.VarChar(60)
+  klinik_description String?    @db.MediumText
+  klinik_image       String     @db.VarChar(500)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  Services           Services[]
+
+  @@map("kliniks")
+}
+
+model Services {
+  service_id   Int         @id @default(autoincrement())
+  service_name String      @db.VarChar(50)
+  capacity     Int         @db.Int()
+  description  String      @db.LongText
+  klinik_id    Int
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  klinik       Kliniks     @relation(fields: [klinik_id], references: [klinik_id])
+  Reservasi    Reservasi[]
+
+  @@map("services")
+}
+
+enum StatusEnum {
+  pending
+  done
+  cancelled
+}
+
+model Reservasi {
+  reservasi_id  Int        @id @default(autoincrement())
+  user_id       String
+  reserved_date DateTime   @db.DateTime()
+  status        StatusEnum @default(pending)
+  service_id    Int
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  service       Services   @relation(fields: [service_id], references: [service_id])
+  user          User       @relation(fields: [user_id], references: [user_id])
+
+  @@map("reservasi")
 }
