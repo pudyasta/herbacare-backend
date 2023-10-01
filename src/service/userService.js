@@ -3,12 +3,10 @@ import { ResponseError } from "../error/response-error.js";
 import {
   loginValidation,
   registerUservalidation,
-} from "../validation/user-validation.js";
+} from "../validation/userValidation.js";
 import { validate } from "../validation/validation.js";
 import bcrypt from "bcrypt";
-import { v4 as uuid } from "uuid";
 import jwt from "jsonwebtoken";
-import { response } from "express";
 
 const registerService = async (req) => {
   const user = validate(registerUservalidation, req);
@@ -62,10 +60,11 @@ const login = async (req) => {
         email: user.email,
         name: user.name,
         address: user.address,
+        role: "admin",
       },
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1m" }
+    { expiresIn: "30d" }
   );
   return {
     status: "success",

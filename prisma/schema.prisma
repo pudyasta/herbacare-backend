@@ -38,6 +38,7 @@ model Articles {
   articles_id Int        @id @default(autoincrement())
   title       String     @db.VarChar(30)
   body        String     @db.LongText
+  image       String     @db.VarChar(100)
   category_id Int
   category    Categories @relation(fields: [category_id], references: [category_id])
 
@@ -50,8 +51,11 @@ model Kliniks {
   klinik_address     String     @db.VarChar(500)
   klinik_phone       String     @unique @db.VarChar(14)
   klinik_email       String     @unique @db.VarChar(60)
+  password           String     @db.VarChar(100)
   klinik_description String?    @db.MediumText
   klinik_image       String     @db.VarChar(500)
+  klinik_open        DateTime   @db.Time()
+  klinik_close       DateTime   @db.Time()
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   Services           Services[]
@@ -63,7 +67,6 @@ model Services {
   service_id   Int         @id @default(autoincrement())
   service_name String      @db.VarChar(50)
   capacity     Int         @db.Int()
-  description  String      @db.LongText
   klinik_id    Int
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
