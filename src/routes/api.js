@@ -2,6 +2,8 @@ import express from "express";
 import { authMiddleware } from "../middleware/adminMiddleware.js";
 import articleController from "../controller/articleController.js";
 import multer from "multer";
+import { loginMiddleware } from "../middleware/loginMiddleware.js";
+import reservasiController from "../controller/reservasiController.js";
 
 const userRouter = new express.Router();
 const fileStorage = multer.diskStorage({
@@ -31,6 +33,11 @@ userRouter.post(
   "/api/article/post",
   authMiddleware,
   articleController.createArticle
+);
+userRouter.post(
+  "/api/reservasi/post",
+  loginMiddleware,
+  reservasiController.createReservasi
 );
 userRouter.get("/api/article/all", articleController.getAllArticle);
 userRouter.get("/api/article/:id", articleController.getArticleById);

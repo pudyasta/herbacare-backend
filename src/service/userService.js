@@ -39,6 +39,7 @@ const login = async (req) => {
       email: logReq.email,
     },
     select: {
+      user_id: true,
       name: true,
       address: true,
       email: true,
@@ -57,10 +58,11 @@ const login = async (req) => {
   const jwToken = jwt.sign(
     {
       data: {
+        user_id: user.user_id,
         email: user.email,
         name: user.name,
         address: user.address,
-        role: "admin",
+        role: "user",
       },
     },
     process.env.JWT_SECRET,

@@ -85,7 +85,7 @@ enum StatusEnum {
 model Reservasi {
   reservasi_id  Int        @id @default(autoincrement())
   user_id       String
-  reserved_date DateTime   @db.DateTime()
+  reserved_date DateTime   @db.Date()
   status        StatusEnum @default(pending)
   service_id    Int
   createdAt     DateTime   @default(now())
