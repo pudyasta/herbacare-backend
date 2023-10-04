@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 
-export const adminMiddleware = async (req, res, next) => {
+export const klinikMiddleware = async (req, res, next) => {
   try {
     const authToken = req.headers.authorization.split(" ")[1];
     if (authToken !== undefined) {
       const authData = jwt.verify(authToken, process.env.JWT_SECRET);
 
-      if (authData.data.role == "admin") {
+      if (authData.data.role == "klinik") {
         res.data = authData;
         next();
       } else {

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const loginMiddleware = async (req, res, next) => {
+export const userMiddleware = async (req, res, next) => {
   try {
     const authToken = req.headers.authorization.split(" ")[1];
     if (authToken !== undefined) {
