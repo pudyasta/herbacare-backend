@@ -28,15 +28,21 @@ const createArticleService = async (req) => {
 };
 
 const getAllArticleService = async (req) => {
-  const articles = await prismaClient.articles.findMany({ take: 50 });
+  const articles = await prismaClient.articles.findMany({
+    take: 50,
+    select: { title: true, body: true, image: true, category_id: true },
+  });
   return articles;
 };
 const getArticleByIdService = async (req) => {
   console.log(req.params.id);
-  const articles = await prismaClient.articles.findUnique({
+  const article = await prismaClient.articles.findUnique({
     where: { articles_id: parseInt(req.params.id) },
+    include: {
+      category: true, // Assuming the relationship is named 'category'
+    },
   });
-  return articles;
+  return article;
 };
 
 export default {
