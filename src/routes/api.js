@@ -47,6 +47,17 @@ userRouter.post(
 userRouter.get("/api/article/all", articleController.getAllArticle);
 userRouter.get("/api/article/:id", articleController.getArticleById);
 
+userRouter.put(
+  "/api/article/edit/:id",
+  adminMiddleware,
+  articleController.editArticle
+);
+userRouter.delete(
+  "/api/article/delete/:id",
+  adminMiddleware,
+  articleController.deleteArticle
+);
+
 userRouter.post(
   "/api/klinik/post",
   userMiddleware,
@@ -71,25 +82,21 @@ userRouter.post(
 
 userRouter.post(
   "/api/categories/post",
-  // adminMiddleware,
+  adminMiddleware,
   categoryController.createCategory
 );
 
 userRouter.put(
   "/api/categories/:id",
-  // adminMiddleware,
+  adminMiddleware,
   categoryController.editCategory
 );
 
-userRouter.get(
-  "/api/category/all",
-  // userMiddleware,
-  categoryController.getAllCategory
-);
+userRouter.get("/api/category/all", categoryController.getAllCategory);
 
 userRouter.delete(
   "/api/categories/:id",
-  // userMiddleware,
+  adminMiddleware,
   categoryController.deleteCategory
 );
 
