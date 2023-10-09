@@ -33,4 +33,38 @@ const getArticleById = async (req, res, next) => {
   }
 };
 
-export default { createArticle, getArticleById, getAllArticle };
+const editArticle = async (req, res, next) => {
+  try {
+    const result = await articleService.editArticleService(req);
+    res.status(200).json({
+      data: {
+        status: "success",
+        message: "article berhasil diedit",
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+const deleteArticle = async (req, res, next) => {
+  try {
+    const result = await articleService.deleteArticleService(req);
+    res.status(200).json({
+      data: {
+        status: "success",
+        message: "article berhasil dihapus",
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default {
+  createArticle,
+  getArticleById,
+  getAllArticle,
+  editArticle,
+  deleteArticle,
+};

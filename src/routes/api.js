@@ -7,6 +7,7 @@ import klinikController from "../controller/klinikController.js";
 import { userMiddleware } from "../middleware/loginMiddleware.js";
 import serviceController from "../controller/serviceController.js";
 import { klinikMiddleware } from "../middleware/klinikMiddleware.js";
+import categoryController from "../controller/categoryController.js";
 
 const userRouter = new express.Router();
 const fileStorage = multer.diskStorage({
@@ -46,6 +47,17 @@ userRouter.post(
 userRouter.get("/api/article/all", articleController.getAllArticle);
 userRouter.get("/api/article/:id", articleController.getArticleById);
 
+userRouter.put(
+  "/api/article/edit/:id",
+  adminMiddleware,
+  articleController.editArticle
+);
+userRouter.delete(
+  "/api/article/delete/:id",
+  adminMiddleware,
+  articleController.deleteArticle
+);
+
 userRouter.post(
   "/api/klinik/post",
   userMiddleware,
@@ -66,6 +78,26 @@ userRouter.post(
   "/api/service/post",
   klinikMiddleware,
   serviceController.createService
+);
+
+userRouter.post(
+  "/api/categories/post",
+  adminMiddleware,
+  categoryController.createCategory
+);
+
+userRouter.put(
+  "/api/categories/:id",
+  adminMiddleware,
+  categoryController.editCategory
+);
+
+userRouter.get("/api/category/all", categoryController.getAllCategory);
+
+userRouter.delete(
+  "/api/categories/:id",
+  adminMiddleware,
+  categoryController.deleteCategory
 );
 
 export { userRouter };

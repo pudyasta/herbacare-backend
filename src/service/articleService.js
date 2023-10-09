@@ -34,6 +34,7 @@ const getAllArticleService = async (req) => {
   });
   return articles;
 };
+
 const getArticleByIdService = async (req) => {
   console.log(req.params.id);
   const article = await prismaClient.articles.findUnique({
@@ -45,8 +46,45 @@ const getArticleByIdService = async (req) => {
   return article;
 };
 
+const editArticleService = async (req) => {
+  const updatedArticle = validate(createArticleValidation, req.body);
+  const articleId = parseInt(req.params.id);
+
+  return prismaClient.articles.update({
+    where: {
+      articles_id: articleId, // Assuming 'id' is the primary key field for categories
+    },
+    data: {
+      title: updatedArticle.title,
+      body: updatedArticle.body,
+      image: updatedArticle.image,
+    },
+    select: {
+      title: true,
+    },
+  });
+};
+
+const deleteArticleService = async (req) => {
+  const articleId = parseInt(req.params.id); // Convert to an integer
+
+  // Delete the category using Prisma
+  const deletedCategory = await prismaClient.articles.delete({
+    where: {
+      articles_id: articleId, // Assuming 'category_id' is the primary key field for categories
+    },
+    select: {
+      title: true,
+    },
+  });
+
+  return deletedCategory;
+};
+
 export default {
   createArticleService,
   getAllArticleService,
   getArticleByIdService,
+  editArticleService,
+  deleteArticleService,
 };
