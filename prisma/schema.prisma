@@ -40,7 +40,7 @@ model Articles {
   body        String     @db.LongText
   image       String     @db.VarChar(100)
   category_id Int
-  category    Categories @relation(fields: [category_id], references: [category_id])
+  category    Categories @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
 
   @@map("articles")
 }
@@ -70,7 +70,7 @@ model Services {
   klinik_id    Int
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  klinik       Kliniks     @relation(fields: [klinik_id], references: [klinik_id])
+  klinik       Kliniks     @relation(fields: [klinik_id], references: [klinik_id], onDelete: Cascade)
   Reservasi    Reservasi[]
 
   @@map("services")
@@ -90,8 +90,8 @@ model Reservasi {
   service_id    Int
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
-  service       Services   @relation(fields: [service_id], references: [service_id])
-  user          User       @relation(fields: [user_id], references: [user_id])
+  service       Services   @relation(fields: [service_id], references: [service_id], onDelete: Cascade)
+  user          User       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
   @@map("reservasi")
 }
