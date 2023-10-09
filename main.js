@@ -21,6 +21,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 web.use("/assets", express.static(path.join(__dirname, "assets")));
 
-web.listen(process.env.PORT || 5000, () => {
+web.listen(process.env.PORT || 3000, () => {
   logger.info("app strat");
 });
