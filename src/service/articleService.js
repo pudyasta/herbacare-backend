@@ -30,7 +30,7 @@ const createArticleService = async (req) => {
 const getAllArticleService = async (req) => {
   const articles = await prismaClient.articles.findMany({
     take: 50,
-    select: { title: true, image: true, category: true },
+    select: { articles_id: true, title: true, image: true, category: true },
   });
   return articles;
 };
