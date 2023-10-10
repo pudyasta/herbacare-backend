@@ -17,4 +17,11 @@ const createService = async (req, res) => {
   });
 };
 
-export default { createService };
+const getAllServicePerKlinik = async (req) => {
+  console.log(req.params.id);
+  const article = await prismaClient.services.findMany({
+    where: { klinik_id: parseInt(req.params.id) },
+  });
+  return article;
+};
+export default { createService, getAllServicePerKlinik };

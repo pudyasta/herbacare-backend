@@ -12,4 +12,16 @@ const createService = async (req, res, next) => {
   }
 };
 
-export default { createService };
+const getAllServicePerKlinik = async (req, res, next) => {
+  try {
+    const result = await serviceService.getAllServicePerKlinik(req, res);
+    res.status(200).json({
+      message: "Success",
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { createService, getAllServicePerKlinik };
