@@ -94,6 +94,7 @@ const getAllKlinik = async (req) => {
   const articles = await prismaClient.kliniks.findMany({
     take: 50,
     select: {
+      klinik_image: true,
       klinik_id: true,
       klinik_name: true,
       klinik_open: true,
@@ -121,6 +122,7 @@ const getKlinikDetailService = async (req) => {
       klinik_close: true,
     },
   });
+
   const service = await prismaClient.services.findMany({
     where: {
       klinik_id: parseInt(req.params.id),
