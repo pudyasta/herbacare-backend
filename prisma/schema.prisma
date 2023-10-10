@@ -47,7 +47,7 @@ model Categories {
 
 model Articles {
   articles_id Int        @id @default(autoincrement())
-  title       String     @db.VarChar(30)
+  title       String     @db.VarChar(80)
   body        String     @db.LongText
   image       String     @db.VarChar(100)
   category_id Int
