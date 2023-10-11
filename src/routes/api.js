@@ -60,7 +60,7 @@ userRouter.delete(
 
 userRouter.post(
   "/api/klinik/post",
-  adminMiddleware,
+  // adminMiddleware,
   klinikController.createKlinik
 );
 userRouter.get("/api/klinik/all", klinikController.getAllKlinik);
@@ -103,4 +103,9 @@ userRouter.delete(
   categoryController.deleteCategory
 );
 
+userRouter.get(
+  "/api/reservasi/:id",
+  // klinikMiddleware,
+  reservasiController.getReservasi
+);
 export { userRouter };

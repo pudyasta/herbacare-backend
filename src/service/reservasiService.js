@@ -54,6 +54,28 @@ const createReservasiService = async (req, res) => {
   }
 };
 
+const getReservasiService = async (req) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayDate = new Date(today.getTime() + 7 * 60 * 60 * 1000); // Adding 7 hours in milliseconds to get GMT+7
+
+  const reservasis = await prismaClient.reservasi.findMany({
+    where: {
+      service_id: parseInt(req.params.id),
+      reserved_date: todayDate,
+    },
+    take: 50,
+    select: {
+      reservasi_id: true,
+      status: true,
+      reserved_date: true,
+      user: { select: { name: true, email: true } },
+    },
+  });
+  return reservasis;
+};
+
 export default {
   createReservasiService,
+  getReservasiService,
 };
