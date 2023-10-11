@@ -12,4 +12,15 @@ const createReservasi = async (req, res, next) => {
   }
 };
 
-export default { createReservasi };
+const getReservasi = async (req, res, next) => {
+  try {
+    const result = await reservasiService.getReservasiService(req);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { createReservasi, getReservasi };

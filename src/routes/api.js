@@ -49,7 +49,7 @@ userRouter.get("/api/article/:id", articleController.getArticleById);
 
 userRouter.put(
   "/api/article/edit/:id",
-  adminMiddleware,
+  // adminMiddleware,
   articleController.editArticle
 );
 userRouter.delete(
@@ -60,7 +60,7 @@ userRouter.delete(
 
 userRouter.post(
   "/api/klinik/post",
-  adminMiddleware,
+  // adminMiddleware,
   klinikController.createKlinik
 );
 userRouter.get("/api/klinik/all", klinikController.getAllKlinik);
@@ -69,6 +69,12 @@ userRouter.get("/api/klinik/:id", klinikController.getKlinikDetail);
 userRouter.get(
   "/api/service/klinik/:id",
   serviceController.getAllServicePerKlinik
+);
+
+userRouter.delete(
+  "/api/klinik/:id",
+  adminMiddleware,
+  klinikController.deleteKlinik
 );
 
 userRouter.post(
@@ -97,4 +103,9 @@ userRouter.delete(
   categoryController.deleteCategory
 );
 
+userRouter.get(
+  "/api/reservasi/:id",
+  // klinikMiddleware,
+  reservasiController.getReservasi
+);
 export { userRouter };

@@ -44,4 +44,24 @@ const getKlinikDetail = async (req, res, next) => {
   }
 };
 
-export default { createKlinik, klinikLogin, getAllKlinik, getKlinikDetail };
+const deleteKlinik = async (req, res, next) => {
+  try {
+    const result = await klinikService.deleteKlinikService(req);
+    res.status(200).json({
+      data: {
+        status: "success",
+        message: "category berhasil dihapus",
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default {
+  createKlinik,
+  klinikLogin,
+  getAllKlinik,
+  getKlinikDetail,
+  deleteKlinik,
+};
