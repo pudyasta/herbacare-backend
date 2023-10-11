@@ -1,6 +1,9 @@
 import { prismaClient } from "../app/db.js";
 import { ResponseError } from "../error/response-error.js";
-import { createArticleValidation } from "../validation/articleValidation.js";
+import {
+  createArticleValidation,
+  editArticleValidation,
+} from "../validation/articleValidation.js";
 import { validate } from "../validation/validation.js";
 
 const createArticleService = async (req) => {
@@ -47,22 +50,37 @@ const getArticleByIdService = async (req) => {
 };
 
 const editArticleService = async (req) => {
-  const updatedArticle = validate(createArticleValidation, req.body);
+  const updatedArticle = validate(editArticleValidation, req.body);
   const articleId = parseInt(req.params.id);
 
-  return prismaClient.articles.update({
-    where: {
-      articles_id: articleId, // Assuming 'id' is the primary key field for categories
-    },
-    data: {
-      title: updatedArticle.title,
-      body: updatedArticle.body,
-      image: updatedArticle.image,
-    },
-    select: {
-      title: true,
-    },
-  });
+  if (req.file) {
+    return prismaClient.articles.update({
+      where: {
+        articles_id: articleId, // Assuming 'id' is the primary key field for categories
+      },
+      data: {
+        title: updatedArticle.title,
+        body: updatedArticle.body,
+        image: req.file.path,
+      },
+      select: {
+        title: true,
+      },
+    });
+  } else {
+    return prismaClient.articles.update({
+      where: {
+        articles_id: articleId, // Assuming 'id' is the primary key field for categories
+      },
+      data: {
+        title: updatedArticle.title,
+        body: updatedArticle.body,
+      },
+      select: {
+        title: true,
+      },
+    });
+  }
 };
 
 const deleteArticleService = async (req) => {

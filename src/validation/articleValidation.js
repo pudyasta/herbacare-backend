@@ -6,4 +6,9 @@ const createArticleValidation = Joi.object({
   category_id: Joi.required(),
 });
 
-export { createArticleValidation };
+const editArticleValidation = Joi.object({
+  title: Joi.string(),
+  body: Joi.string(),
+  category_id: Joi.number(),
+});
+export { createArticleValidation, editArticleValidation };

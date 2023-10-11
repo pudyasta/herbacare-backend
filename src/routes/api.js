@@ -49,7 +49,7 @@ userRouter.get("/api/article/:id", articleController.getArticleById);
 
 userRouter.put(
   "/api/article/edit/:id",
-  adminMiddleware,
+  // adminMiddleware,
   articleController.editArticle
 );
 userRouter.delete(
@@ -68,10 +68,17 @@ userRouter.get(
   userMiddleware,
   klinikController.getAllKlinik
 );
+
 userRouter.get(
   "/api/klinik/:id",
   userMiddleware,
   klinikController.getKlinikDetail
+);
+
+userRouter.delete(
+  "/api/klinik/:id",
+  adminMiddleware,
+  klinikController.deleteKlinik
 );
 
 userRouter.post(

@@ -138,9 +138,26 @@ const getKlinikDetailService = async (req) => {
   };
 };
 
+const deleteKlinikService = async (req) => {
+  const klinikId = parseInt(req.params.id); // Convert to an integer
+
+  // Delete the category using Prisma
+  const deletedKlinik = await prismaClient.kliniks.delete({
+    where: {
+      klinik_id: klinikId, // Assuming 'category_id' is the primary key field for categories
+    },
+    select: {
+      klinik_name: true,
+    },
+  });
+
+  return deletedKlinik;
+};
+
 export default {
   createKlinikService,
   loginKlinik,
   getAllKlinik,
   getKlinikDetailService,
+  deleteKlinikService,
 };
