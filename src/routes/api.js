@@ -60,19 +60,15 @@ userRouter.delete(
 
 userRouter.post(
   "/api/klinik/post",
-  userMiddleware,
+  adminMiddleware,
   klinikController.createKlinik
 );
-userRouter.get(
-  "/api/klinik/all",
-  userMiddleware,
-  klinikController.getAllKlinik
-);
+userRouter.get("/api/klinik/all", klinikController.getAllKlinik);
+userRouter.get("/api/klinik/:id", klinikController.getKlinikDetail);
 
 userRouter.get(
-  "/api/klinik/:id",
-  userMiddleware,
-  klinikController.getKlinikDetail
+  "/api/service/klinik/:id",
+  serviceController.getAllServicePerKlinik
 );
 
 userRouter.delete(

@@ -24,6 +24,17 @@ model User {
   @@map("users")
 }
 
+model Admin {
+  admin_id  String   @id @default(uuid())
+  name      String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(100)
+  password  String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
 model Categories {
   category_id   Int        @id @default(autoincrement())
   category_name String     @db.VarChar(20)
@@ -36,11 +47,11 @@ model Categories {
 
 model Articles {
   articles_id Int        @id @default(autoincrement())
-  title       String     @db.VarChar(30)
+  title       String     @db.VarChar(80)
   body        String     @db.LongText
   image       String     @db.VarChar(100)
   category_id Int
-  category    Categories @relation(fields: [category_id], references: [category_id])
+  category    Categories @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
 
   @@map("articles")
 }
@@ -70,7 +81,7 @@ model Services {
   klinik_id    Int
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  klinik       Kliniks     @relation(fields: [klinik_id], references: [klinik_id])
+  klinik       Kliniks     @relation(fields: [klinik_id], references: [klinik_id], onDelete: Cascade)
   Reservasi    Reservasi[]
 
   @@map("services")
@@ -90,8 +101,8 @@ model Reservasi {
   service_id    Int
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
-  service       Services   @relation(fields: [service_id], references: [service_id])
-  user          User       @relation(fields: [user_id], references: [user_id])
+  service       Services   @relation(fields: [service_id], references: [service_id], onDelete: Cascade)
+  user          User       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
   @@map("reservasi")
 }
