@@ -46,6 +46,7 @@ userRouter.post(
 
 userRouter.get("/api/article/all", articleController.getAllArticle);
 userRouter.get("/api/article/:id", articleController.getArticleById);
+userRouter.get("/api/article/search/:value", articleController.searchArticle);
 
 userRouter.put(
   "/api/article/edit/:id",
@@ -65,6 +66,7 @@ userRouter.post(
 );
 userRouter.get("/api/klinik/all", klinikController.getAllKlinik);
 userRouter.get("/api/klinik/:id", klinikController.getKlinikDetail);
+userRouter.get("/api/klinik/search/:value", klinikController.searchKlinik);
 
 userRouter.get(
   "/api/service/klinik/:id",
@@ -108,4 +110,5 @@ userRouter.get(
   // klinikMiddleware,
   reservasiController.getReservasi
 );
+
 export { userRouter };

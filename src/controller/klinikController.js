@@ -58,10 +58,22 @@ const deleteKlinik = async (req, res, next) => {
   }
 };
 
+const searchKlinik = async (req, res, next) => {
+  try {
+    const result = await klinikService.searchKlinikService(req);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export default {
   createKlinik,
   klinikLogin,
   getAllKlinik,
   getKlinikDetail,
   deleteKlinik,
+  searchKlinik,
 };

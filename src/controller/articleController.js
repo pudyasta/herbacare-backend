@@ -61,10 +61,22 @@ const deleteArticle = async (req, res, next) => {
   }
 };
 
+const searchArticle = async (req, res, next) => {
+  try {
+    const result = await articleService.searchArticleService(req);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export default {
   createArticle,
   getArticleById,
   getAllArticle,
   editArticle,
   deleteArticle,
+  searchArticle,
 };
