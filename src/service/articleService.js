@@ -125,12 +125,32 @@ const deleteArticleService = async (req) => {
 const searchArticleService = async (req) => {
   const searchTerm = req.params.value;
 
-  const articles = await prismaClient.articles.findMany({
+  let articles = await prismaClient.articles.findMany({
     where: {
       title: {
         contains: searchTerm,
       },
     },
+    select: {
+      articles_id: true,
+      title: true,
+      image: true,
+      category: true,
+      body: true,
+    },
+  });
+  articles = articles.map((e, i) => {
+    return {
+      ...articles[i],
+      body: sanitizeHtml(articles[i].body, {
+        allowedTags: [],
+        allowedAttributes: [],
+      })
+        .trim()
+        .split(/\s+/)
+        .slice(0, 20)
+        .join(" "),
+    };
   });
 
   return articles;
