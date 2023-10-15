@@ -99,10 +99,26 @@ const deleteArticleService = async (req) => {
   return deletedCategory;
 };
 
+const searchArticleService = async (req) => {
+  const searchTerm = req.params.value; // Get the search term from query parameters
+
+  // Search for articles whose body contains the search term using Prisma
+  const articles = await prismaClient.articles.findMany({
+    where: {
+      body: {
+        contains: searchTerm, // Using 'contains' to perform a LIKE search
+      },
+    },
+  });
+
+  return articles;
+};
+
 export default {
   createArticleService,
   getAllArticleService,
   getArticleByIdService,
   editArticleService,
   deleteArticleService,
+  searchArticleService,
 };

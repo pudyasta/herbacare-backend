@@ -156,10 +156,25 @@ const deleteKlinikService = async (req) => {
   return deletedKlinik;
 };
 
+const searchKlinikService = async (req) => {
+  const searchTerm = req.params.value; // Get the search term from query parameters
+  // Search for articles whose body contains the search term using Prisma
+  const kliniks = await prismaClient.kliniks.findMany({
+    where: {
+      klinik_name: {
+        contains: searchTerm, // Using 'contains' to perform a LIKE search
+      },
+    },
+  });
+
+  return kliniks;
+};
+
 export default {
   createKlinikService,
   loginKlinik,
   getAllKlinik,
   getKlinikDetailService,
   deleteKlinikService,
+  searchKlinikService,
 };
