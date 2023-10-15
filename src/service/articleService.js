@@ -1,9 +1,11 @@
 import { prismaClient } from "../app/db.js";
 import { ResponseError } from "../error/response-error.js";
+import { stripHtml } from "../helper/helper.js";
 import {
   createArticleValidation,
   editArticleValidation,
 } from "../validation/articleValidation.js";
+import sanitizeHtml from "sanitize-html";
 import { validate } from "../validation/validation.js";
 
 const createArticleService = async (req) => {
@@ -31,10 +33,31 @@ const createArticleService = async (req) => {
 };
 
 const getAllArticleService = async (req) => {
-  const articles = await prismaClient.articles.findMany({
+  let articles = await prismaClient.articles.findMany({
     take: 50,
-    select: { articles_id: true, title: true, image: true, category: true },
+    select: {
+      articles_id: true,
+      title: true,
+      image: true,
+      category: true,
+      body: true,
+    },
   });
+
+  articles = articles.map((e, i) => {
+    return {
+      ...articles[i],
+      body: sanitizeHtml(articles[i].body, {
+        allowedTags: [],
+        allowedAttributes: [],
+      })
+        .trim()
+        .split(/\s+/)
+        .slice(0, 20)
+        .join(" "),
+    };
+  });
+
   return articles;
 };
 
@@ -43,7 +66,7 @@ const getArticleByIdService = async (req) => {
   const article = await prismaClient.articles.findUnique({
     where: { articles_id: parseInt(req.params.id) },
     include: {
-      category: true, // Assuming the relationship is named 'category'
+      category: true,
     },
   });
   return article;
@@ -56,7 +79,7 @@ const editArticleService = async (req) => {
   if (req.file) {
     return prismaClient.articles.update({
       where: {
-        articles_id: articleId, // Assuming 'id' is the primary key field for categories
+        articles_id: articleId,
       },
       data: {
         title: updatedArticle.title,
@@ -70,7 +93,7 @@ const editArticleService = async (req) => {
   } else {
     return prismaClient.articles.update({
       where: {
-        articles_id: articleId, // Assuming 'id' is the primary key field for categories
+        articles_id: articleId,
       },
       data: {
         title: updatedArticle.title,
@@ -89,7 +112,7 @@ const deleteArticleService = async (req) => {
   // Delete the category using Prisma
   const deletedCategory = await prismaClient.articles.delete({
     where: {
-      articles_id: articleId, // Assuming 'category_id' is the primary key field for categories
+      articles_id: articleId,
     },
     select: {
       title: true,
@@ -100,13 +123,12 @@ const deleteArticleService = async (req) => {
 };
 
 const searchArticleService = async (req) => {
-  const searchTerm = req.params.value; // Get the search term from query parameters
+  const searchTerm = req.params.value;
 
-  // Search for articles whose body contains the search term using Prisma
   const articles = await prismaClient.articles.findMany({
     where: {
-      body: {
-        contains: searchTerm, // Using 'contains' to perform a LIKE search
+      title: {
+        contains: searchTerm,
       },
     },
   });
