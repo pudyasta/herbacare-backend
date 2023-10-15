@@ -75,7 +75,25 @@ const getReservasiService = async (req) => {
   return reservasis;
 };
 
+const getReservasiByUserService = async (req, res) => {
+  const data = res.data.data.user_id;
+  const reservasis = await prismaClient.reservasi.findMany({
+    where: {
+      user_id: data,
+    },
+    take: 50,
+    select: {
+      reservasi_id: true,
+      status: true,
+      reserved_date: true,
+      user: { select: { name: true, email: true } },
+    },
+  });
+  return reservasis;
+};
+
 export default {
   createReservasiService,
   getReservasiService,
+  getReservasiByUserService,
 };

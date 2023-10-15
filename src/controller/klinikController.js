@@ -50,7 +50,7 @@ const deleteKlinik = async (req, res, next) => {
     res.status(200).json({
       data: {
         status: "success",
-        message: "category berhasil dihapus",
+        message: "Klinik berhasil dihapus",
       },
     });
   } catch (e) {
