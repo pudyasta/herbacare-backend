@@ -33,6 +33,17 @@ const getArticleById = async (req, res, next) => {
   }
 };
 
+const getArticleByCategory = async (req, res, next) => {
+  try {
+    const result = await articleService.getArticleByCategoryService(req);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 const editArticle = async (req, res, next) => {
   try {
     const result = await articleService.editArticleService(req);
@@ -79,4 +90,5 @@ export default {
   editArticle,
   deleteArticle,
   searchArticle,
+  getArticleByCategory,
 };

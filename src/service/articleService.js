@@ -62,7 +62,6 @@ const getAllArticleService = async (req) => {
 };
 
 const getArticleByIdService = async (req) => {
-  console.log(req.params.id);
   const article = await prismaClient.articles.findUnique({
     where: { articles_id: parseInt(req.params.id) },
     include: {
@@ -156,11 +155,46 @@ const searchArticleService = async (req) => {
   return articles;
 };
 
+const getArticleByCategoryService = async (req) => {
+  const searchTerm = parseInt(req.params.value);
+
+  let articles = await prismaClient.articles.findMany({
+    where: {
+      category_id: {
+        equals: searchTerm,
+      },
+    },
+    select: {
+      articles_id: true,
+      title: true,
+      image: true,
+      category: true,
+      body: true,
+    },
+  });
+  articles = articles.map((e, i) => {
+    return {
+      ...articles[i],
+      body: sanitizeHtml(articles[i].body, {
+        allowedTags: [],
+        allowedAttributes: [],
+      })
+        .trim()
+        .split(/\s+/)
+        .slice(0, 20)
+        .join(" "),
+    };
+  });
+
+  return articles;
+};
+
 export default {
   createArticleService,
   getAllArticleService,
   getArticleByIdService,
   editArticleService,
   deleteArticleService,
+  getArticleByCategoryService,
   searchArticleService,
 };
