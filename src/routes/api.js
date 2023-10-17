@@ -47,6 +47,10 @@ userRouter.post(
 userRouter.get("/api/article/all", articleController.getAllArticle);
 userRouter.get("/api/article/:id", articleController.getArticleById);
 userRouter.get("/api/article/search/:value", articleController.searchArticle);
+userRouter.get(
+  "/api/article/search/category/:value",
+  articleController.getArticleByCategory
+);
 
 userRouter.put(
   "/api/article/edit/:id",
