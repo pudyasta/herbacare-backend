@@ -87,6 +87,15 @@ const getReservasiByUserService = async (req, res) => {
       status: true,
       reserved_date: true,
       user: { select: { name: true, email: true } },
+      service: {
+        select: {
+          klinik: {
+            select: {
+              klinik_address: true,
+            },
+          },
+        },
+      },
     },
   });
   return reservasis;
