@@ -101,8 +101,46 @@ const getReservasiByUserService = async (req, res) => {
   return reservasis;
 };
 
+const getReservasiByKlinikService = async (req, res) => {
+  const data = req.params.id;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const reservasis = await prismaClient.reservasi.findMany({
+    where: {
+      service: {
+        klinik_id: parseInt(data),
+      },
+      reserved_date: {
+        gte: today,
+        lt: tomorrow,
+      },
+    },
+    take: 50,
+    select: {
+      reservasi_id: true,
+      status: true,
+      reserved_date: true,
+      user: { select: { name: true, email: true } },
+      service: {
+        select: {
+          klinik: {
+            select: {
+              klinik_address: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return reservasis;
+};
+
 export default {
   createReservasiService,
   getReservasiService,
   getReservasiByUserService,
+  getReservasiByKlinikService,
 };
