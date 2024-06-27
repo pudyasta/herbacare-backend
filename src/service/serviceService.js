@@ -24,4 +24,16 @@ const getAllServicePerKlinik = async (req) => {
   });
   return article;
 };
-export default { createService, getAllServicePerKlinik };
+
+const deleteKlinikService = async (req) => {
+  const klinikId = parseInt(req.params.id);
+  const deletedKlinik = await prismaClient.services.delete({
+    where: {
+      service_id: klinikId, // Assuming 'category_id' is the primary key field for categories
+    },
+  });
+
+  return deletedKlinik;
+};
+
+export default { createService, getAllServicePerKlinik, deleteKlinikService };

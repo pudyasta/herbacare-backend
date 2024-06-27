@@ -24,4 +24,18 @@ const getAllServicePerKlinik = async (req, res, next) => {
   }
 };
 
-export default { createService, getAllServicePerKlinik };
+const deleteService = async (req, res, next) => {
+  try {
+    const result = await serviceService.deleteKlinikService(req);
+    res.status(200).json({
+      data: {
+        status: "success",
+        message: "Service berhasil dihapus",
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { createService, getAllServicePerKlinik, deleteService };
