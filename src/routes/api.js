@@ -82,6 +82,11 @@ userRouter.delete(
   adminMiddleware,
   klinikController.deleteKlinik
 );
+userRouter.delete(
+  "/api/service/:id",
+  klinikMiddleware,
+  serviceController.deleteService
+);
 
 userRouter.post(
   "/api/service/post",
