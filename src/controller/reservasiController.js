@@ -33,5 +33,20 @@ const getReservasiByUser = async (req, res, next) => {
     next(e);
   }
 };
+const getReservasiByKlinik = async (req, res, next) => {
+  try {
+    const result = await reservasiService.getReservasiByKlinikService(req, res);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 
-export default { createReservasi, getReservasi, getReservasiByUser };
+export default {
+  createReservasi,
+  getReservasi,
+  getReservasiByUser,
+  getReservasiByKlinik,
+};

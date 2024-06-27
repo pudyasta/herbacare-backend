@@ -119,10 +119,15 @@ userRouter.get(
   // klinikMiddleware,
   reservasiController.getReservasi
 );
+userRouter.get(
+  "/api/reservasi-klinik/:id",
+  // klinikMiddleware,
+  reservasiController.getReservasiByKlinik
+);
 
 userRouter.get(
   "/api/reservasi/user/all",
-  userMiddleware,
+  // userMiddleware,
   reservasiController.getReservasiByUser
 );
 
