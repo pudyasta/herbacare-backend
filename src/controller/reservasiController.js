@@ -44,9 +44,23 @@ const getReservasiByKlinik = async (req, res, next) => {
   }
 };
 
+const patchConfirmReservasi = async (req, res, next) => {
+  console.log(req.body);
+  try {
+    await reservasiService.patchConfirmReservasiService(req, res);
+    return res.status(200).json({
+      status: "success",
+      message: "Reservation status updated successfully",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export default {
   createReservasi,
   getReservasi,
   getReservasiByUser,
   getReservasiByKlinik,
+  patchConfirmReservasi,
 };

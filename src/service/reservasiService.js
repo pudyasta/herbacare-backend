@@ -138,9 +138,49 @@ const getReservasiByKlinikService = async (req, res) => {
   return reservasis;
 };
 
+const patchConfirmReservasiService = async (req, res) => {
+  try {
+    const { reservasi_id, status } = req.body;
+    const validStatuses = ["pending", "done", "cancelled"];
+
+    // Validate the status
+    if (!validStatuses.includes(status)) {
+      throw new ResponseError(400, "Invalid status");
+    }
+
+    // Check if the reservation exists
+    const reservation = await prismaClient.reservasi.findUnique({
+      where: { reservasi_id: parseInt(reservasi_id) },
+    });
+
+    if (!reservation) {
+      throw new ResponseError(404, "Reservation not found");
+    }
+
+    // Update the reservation status
+    const updatedReservation = await prismaClient.reservasi.update({
+      where: { reservasi_id: parseInt(reservasi_id) },
+      data: { status: status, updatedAt: new Date() },
+    });
+
+    // Return the updated reservation
+    return res.status(200).json({
+      message: "Reservation status updated successfully",
+      data: updatedReservation,
+    });
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      return res.status(error.statusCode).json({ error: error.message });
+    } else {
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+};
+
 export default {
   createReservasiService,
   getReservasiService,
   getReservasiByUserService,
   getReservasiByKlinikService,
+  patchConfirmReservasiService,
 };

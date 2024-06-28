@@ -131,4 +131,10 @@ userRouter.get(
   reservasiController.getReservasiByUser
 );
 
+userRouter.patch(
+  "/api/reservasi/confirm",
+  klinikMiddleware,
+  reservasiController.patchConfirmReservasi
+);
+
 export { userRouter };
