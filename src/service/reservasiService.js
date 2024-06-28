@@ -124,6 +124,7 @@ const getReservasiByKlinikService = async (req, res) => {
     select: {
       reservasi_id: true,
       status: true,
+      user_id: true,
       reserved_date: true,
       user: { select: { name: true, email: true } },
       service: {
