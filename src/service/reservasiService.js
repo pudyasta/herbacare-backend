@@ -2,14 +2,16 @@ import { prismaClient } from "../app/db.js";
 import { ResponseError } from "../error/response-error.js";
 
 const createReservasiService = async (req, res) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set the time to midnight for today
-  const tomorrow = new Date(today);
+  const date = new Date(req.body.reserved_date);
+
+  const tomorrow = new Date(date);
   tomorrow.setDate(tomorrow.getDate() + 1);
+
+  // Format the date as YYYY-MM-DD HH:MM:SS
   const isReserved = await prismaClient.reservasi.count({
     where: {
       reserved_date: {
-        gte: today,
+        gte: date,
         lt: tomorrow,
       },
       user_id: res.data.data.user_id,
@@ -22,7 +24,7 @@ const createReservasiService = async (req, res) => {
     const pending = await prismaClient.reservasi.count({
       where: {
         reserved_date: {
-          gte: today,
+          gte: date,
           lt: tomorrow,
         },
         NOT: {
@@ -42,7 +44,7 @@ const createReservasiService = async (req, res) => {
       return prismaClient.reservasi.create({
         data: {
           user_id: res.data.data.user_id,
-          reserved_date: new Date().toISOString(),
+          reserved_date: date,
           service_id: req.body.service_id,
         },
       });
