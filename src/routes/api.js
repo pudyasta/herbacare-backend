@@ -127,7 +127,7 @@ userRouter.get(
 
 userRouter.get(
   "/api/reservasi/user/all",
-  // userMiddleware,
+  userMiddleware,
   reservasiController.getReservasiByUser
 );
 
